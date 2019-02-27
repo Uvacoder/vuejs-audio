@@ -4,7 +4,7 @@
 <button @click="play">Play</button>
 <button @click="pause">Pause</button>
 
-<progress @click="progressClick" id="seekbar" value="0" max="1" style="width:400px;"></progress></div>
+<progress @click="progressClick" id="seekbar" value="0.2" max="1" style="width:400px;"></progress></div>
 <div class="flex1"><div>{{ currentTime  }}</div><div> /  {{ duration }}</div></div>
   </div>
 </template>
@@ -29,11 +29,6 @@ export default {
     pause() {
     document.getElementById('player').pause();
 },
-    skipTime() {
-      var player = document.getElementById('player')
-
-      player.currentTime = 20;
-},
 
     progressClick(e) {
       let el = document.getElementById('seekbar');
@@ -53,11 +48,11 @@ export default {
     progressbar.value = (player.currentTime / player.duration);
     // convert time
      const convertTime = (setTime) => {
-    var date = new Date(null);
-    date.setSeconds(setTime);
-    var utc = date.toUTCString();
-    return utc.substr(utc.indexOf(':') - 2, 8);
-    }
+        var date = new Date(null);
+        date.setSeconds(setTime);
+        var utc = date.toUTCString();
+        return utc.substr(utc.indexOf(':') - 2, 8);
+         }
     this.currentTime = convertTime(player.currentTime);
     this.duration = convertTime(player.duration)
 }
