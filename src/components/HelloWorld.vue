@@ -3,22 +3,22 @@
     <div><button @click="audioVisual">TRYING TO GET DATA FROM AUDIO VISUAL INPUT</button>
     </div>
     <div class="allboxes">
-    <div class="changeheight0" :style="{'height':data1[0]+'px'}"><p></p></div>
-    <div class="changeheight1" :style="{'height':data1[1]+'px'}"><p></p></div>
-    <div class="changeheight2" :style="{'height':data1[2]+'px'}"><p></p></div>
-    <div class="changeheight3" :style="{'height':data1[3]+'px'}"><p></p></div>
-    <div class="changeheight4" :style="{'height':data1[4]+'px'}"><p></p></div>
-    <div class="changeheight5" :style="{'height':data1[5]+'px'}"><p></p></div>
-    <div class="changeheight6" :style="{'height':data1[6]+'px'}"><p></p></div>
-    <div class="changeheight7" :style="{'height':data1[7]+'px'}"><p></p></div>
-    <!-- <div class="changeheight8" :style="{'height':data1[8]+'px'}"><p></p></div> -->
+    <div class="changeheight0" :style="{height: data1[0]+'px'}"></div>
+    <div class="changeheight1" :style="{height: data1[1]+'px'}"></div>
+    <div class="changeheight2" :style="{height: data1[2]+'px'}"></div>
+    <div class="changeheight3" :style="{height: data1[3]+'px'}"></div>
+    <div class="changeheight4" :style="{height: data1[4]+'px'}"></div>
+    <div class="changeheight5" :style="{height: data1[5]+'px'}"></div>
+    <div class="changeheight6" :style="{height: data1[6]+'px'}"></div>
+    <div class="changeheight7" :style="{height: data1[7]+'px'}"></div>
+    <div class="changeheight8" :style="{height: data1[8]+'px'}"></div>
     </div>
    <div><audio :ontimeupdate.prop="updateProgress" id="player"></audio> 
    <div class="float"> 
 <button @click="play">Play</button>
 <button @click="pause">Pause</button>
 
-<progress @click="progressClick" id="seekbar" value="0.2" max="1" style="width:600px;"></progress></div>
+<progress @click="progressClick" id="seekbar" value="0.0" max="1" style="width:600px;"></progress></div>
 <div class="flex1"><div>{{ currentTime  }}</div><div> /  {{ duration }}</div></div>
 </div>
   </div>
@@ -58,12 +58,15 @@ export default {
     var sourceNode = ctx.createMediaElementSource(audioElement);
 
     var analyser = ctx.createAnalyser();
+    analyser.smoothingTimeConstant = 0.85
+    analyser.fftSize = 1024;
     sourceNode.connect(analyser);
     analyser.connect(ctx.destination);
 
     audioElement.play()
 
     var frequencyData = new Uint8Array(analyser.frequencyBinCount);
+    // analyser.frequencyBinCount
 
     analyser.getByteFrequencyData(frequencyData);
 
@@ -79,23 +82,23 @@ export default {
 
       setInterval(function() {
         analyser.getByteFrequencyData(frequencyData);
-
-        function groupAverage(arr, n) {
-      var result = [];
-      for (var i = 0; i < arr.length;) {
-       var sum = 0;
-       for(var j = 0; j< n; j++){
-      // Check if value is numeric. If not use default value as 0
-        sum += +arr[i++] || 0
-       }
-       result.push(sum/n);
-     }
-       return result
-      }
-        let result = groupAverage(frequencyData, 128)
-
-        this.data1 = result;
-      }, 500);
+        // console.log(frequencyData);
+    //     function groupAverage(arr, n) {
+    //   var result = [];
+    //   for (var i = 0; i < arr.length;) {
+    //    var sum = 0;
+    //    for(var j = 0; j< n; j++){
+    //   // Check if value is numeric. If not use default value as 0
+    //     sum += +arr[i++] || 0
+    //    }
+    //    result.push(sum/n);
+    //  }
+    //    return result
+      // }
+        // console.log(result);
+        this.data1 = frequencyData;
+        console.log(this.data1)
+      }, 1000);
 
 
 
@@ -137,7 +140,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 250px;
+  height: 320px;
 }
 
 .changeheight0 {
@@ -204,6 +207,15 @@ export default {
 }
 
 .changeheight7 {
+  display: flex;
+  background-color: #5000FF;
+  /* border: 1px solid white; */
+  color: white;
+  width: 20px;
+  justify-items: center;
+}
+
+.changeheight8 {
   display: flex;
   background-color: #5000FF;
   /* border: 1px solid white; */
